@@ -2,9 +2,11 @@ const express = require('express');
 
 const app = express();
 
-const routes = require("./routes");
+const routes = require("./routes.js");
 
 app.use(routes);
+
+app.use(express.json());
 
 const bodyParser = require("body-parser");
 
