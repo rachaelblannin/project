@@ -8,16 +8,19 @@ routes.post("/createCharacter", (req, res) => spongeModel.create(req.body)
 
 routes.get("/getall", (req, res) => spongeModel.find({}).then(results => res.send(results)).catch(err => next(err)));
 
-routes.put("/replace/:id", (req, res) => {
-    console.log("QUERY:", req.query);
-    const newName = req.query.name;
-    const oldName = names[req.params.id];
-    names [req.params.id] = newName;
-    res.send(`Replaced ${oldName} with ${names[req.params.id]}`);
+routes.put("/replace/:id", async (req, res) => {
+    console.log("BODY:", req.body);
+    await spongeModel.findByIdAndUpdate(req.params.id);
+    res.send();
 });
 
-routes.delete("/delete/:id", (req, res) => {
-    res.send(names.splice(req.params.id, 1))
+routes.delete("/delete/:id", async (req, res, next) => {
+    try {
+        await spongeModel.findByIdAndDelete(req.params.id);
+        return res.send();
+    } catch(err) {
+        return next(err);
+    }
 });
 
 module.exports = routes;
